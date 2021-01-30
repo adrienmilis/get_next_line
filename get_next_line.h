@@ -17,13 +17,15 @@
 # include <unistd.h>
 # include <stdio.h> // a enlever
 
+void			*ft_calloc(int count, int size);
 int				alloc_strs(char **buf, char **sup);
+char			*ft_strdup(const char *str);
+int				make_line(int fd, char *buf, char **line, char *sup);
 int				get_next_line(int fd, char **line);
 unsigned long	ft_strlen(char *str);
 char			*trunc_str_wfree(char *str);
 void			stock_supp(const char *str, char *sup, int nb_car);
 char			*ft_strjoin_wfree(char *str, char *buf, int nb_car);
 int				newline_in_str(char *str);
-char			*ft_strdup(const char *str);
 
 #endif

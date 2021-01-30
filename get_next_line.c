@@ -62,31 +62,17 @@ char	*ft_strdup(const char *str)
 	return (str_cpy);
 }
 
-int		get_next_line(int fd, char **line)
+int		make_line(int fd, char *buf, char **line, char *sup)
 {
-	char		*buf;
-	static char	*sup;
-	int			ret;
+	int	ret;
 
-	ret = BUFFER_SIZE;
-	if (!(alloc_strs(&buf, &sup)))
-		return (-1);
-	if (!(*line = ft_strdup(sup)))
-		return (-1);
-	if (newline_in_str(*line))
-	{
-		stock_supp(*line, sup, ret);
-		*line = trunc_str_wfree(*line);
-		free(buf);
-		return (1);
-	}
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == -1 || ret == 0)
 	{
 		free(buf);
 		return (ret);
 	}
-	while (!newline_in_str(buf))
+	while(!newline_in_str(buf))
 	{
 		*line = ft_strjoin_wfree(*line, buf, ret);
 		ret = read(fd, buf, BUFFER_SIZE);
@@ -100,4 +86,28 @@ int		get_next_line(int fd, char **line)
 	stock_supp(buf, sup, ret);
 	free(buf);
 	return (1);
+}
+
+int		get_next_line(int fd, char **line)
+{
+	char		*buf;
+	static char	*sup;
+	int			ret;
+
+	ret = BUFFER_SIZE;
+	if (fd < 0)
+		return (-1);
+	if (!(alloc_strs(&buf, &sup)))
+		return (-1);
+	if (!(*line = ft_strdup(sup)))
+		return (-1);
+	if (newline_in_str(*line))
+	{
+		stock_supp(*line, sup, ret);
+		*line = trunc_str_wfree(*line);
+		free(buf);
+		return (1);
+	}
+	ret = make_line(fd, buf, line, sup);
+	return (ret);
 }
