@@ -7,7 +7,7 @@ int main()
 	int		ret;
 	char	*line;
 
-	fd = open("/Users/adrienmilis/Documents/19/Projects/get_next_line/GNL_github/42TESTERS-GNL/files/empty_lines", O_RDONLY);
+	fd = open("/Users/adrienmilis/Documents/19/Projects/get_next_line/gnl_testers/Get_Next_Line_Tester/test/64bit_paragraph.txt", O_RDONLY);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		printf("[%d] [%s]\n", ret, line);
