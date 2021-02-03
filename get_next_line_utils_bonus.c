@@ -6,11 +6,11 @@
 /*   By: amilis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 14:54:49 by amilis            #+#    #+#             */
-/*   Updated: 2021/01/20 14:54:50 by amilis           ###   ########.fr       */
+/*   Updated: 2021/02/03 16:15:03 by amilis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 unsigned long	ft_strlen(char *str)
 {

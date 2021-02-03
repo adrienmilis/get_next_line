@@ -6,11 +6,11 @@
 /*   By: amilis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 14:54:44 by amilis            #+#    #+#             */
-/*   Updated: 2021/01/20 14:54:45 by amilis           ###   ########.fr       */
+/*   Updated: 2021/02/03 16:14:57 by amilis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_calloc(int count, int size)
 {
@@ -29,15 +29,14 @@ void	*ft_calloc(int count, int size)
 	return (ptr);
 }
 
-int		alloc_strs(char **buf, char **sup)
+int		alloc_strs(char **buf, char **sup, int fd)
 {
 	if (!(*buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char))))
 		return (0);
-	if (*sup == NULL)
+	if (sup[fd] == NULL)
 	{
-		if (!(*sup = malloc(sizeof(char) * BUFFER_SIZE)))
+		if (!(sup[fd] = ft_calloc(BUFFER_SIZE, sizeof(char))))
 			return (0);
-		*sup[0] = 0;
 	}
 	return (1);
 }
@@ -62,7 +61,7 @@ char	*ft_strdup(const char *str)
 	return (str_cpy);
 }
 
-int		make_line(int fd, char *buf, char **line, char *sup)
+int		make_line(int fd, char *buf, char **line, char **sup)
 {
 	int	ret;
 
@@ -83,7 +82,7 @@ int		make_line(int fd, char *buf, char **line, char *sup)
 		}
 	}
 	*line = ft_strjoin_wfree(*line, buf, ret);
-	stock_supp(buf, sup, ret);
+	stock_supp(buf, sup[fd], ret);
 	free(buf);
 	return (1);
 }
@@ -91,19 +90,24 @@ int		make_line(int fd, char *buf, char **line, char *sup)
 int		get_next_line(int fd, char **line)
 {
 	char		*buf;
-	static char	*sup;
+	static char	**sup;
 	int			ret;
 
 	ret = BUFFER_SIZE;
 	if (fd < 0)
 		return (-1);
-	if (!(alloc_strs(&buf, &sup)))
+	if (sup == NULL)
+	{
+		if (!(sup = malloc(sizeof(char*) * OPEN_MAX)))
+			return (-1);
+	}
+	if (!(alloc_strs(&buf, sup, fd)))
 		return (-1);
-	if (!(*line = ft_strdup(sup)))
+	if (!(*line = ft_strdup(sup[fd])))
 		return (-1);
 	if (newline_in_str(*line))
 	{
-		stock_supp(*line, sup, ret);
+		stock_supp(*line, sup[fd], ret);
 		*line = trunc_str_wfree(*line);
 		free(buf);
 		return (1);
