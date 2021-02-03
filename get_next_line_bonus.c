@@ -68,6 +68,7 @@ int		make_line(int fd, char *buf, char **line, char **sup)
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == -1 || ret == 0)
 	{
+		sup[fd][0] = 0;
 		free(buf);
 		return (ret);
 	}
@@ -77,6 +78,7 @@ int		make_line(int fd, char *buf, char **line, char **sup)
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (ret == -1 || ret == 0)
 		{
+			sup[fd][0] = 0;
 			free(buf);
 			return (ret);
 		}
@@ -94,13 +96,11 @@ int		get_next_line(int fd, char **line)
 	int			ret;
 
 	ret = BUFFER_SIZE;
-	if (fd < 0)
+	if (fd < 0 || fd > OPEN_MAX || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (sup == NULL)
-	{
 		if (!(sup = malloc(sizeof(char*) * OPEN_MAX)))
 			return (-1);
-	}
 	if (!(alloc_strs(&buf, sup, fd)))
 		return (-1);
 	if (!(*line = ft_strdup(sup[fd])))
