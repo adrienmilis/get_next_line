@@ -24,8 +24,8 @@ int				make_line(int fd, char *buf, char **line, char **sup);
 int				get_next_line(int fd, char **line);
 unsigned long	ft_strlen(char *str);
 char			*trunc_str_wfree(char *str);
-void			stock_supp(const char *str, char *sup, int nb_car);
+void			stock_supp(const char *str, char *sup, int nb_car, int mode);
 char			*ft_strjoin_wfree(char *str, char *buf, int nb_car);
-int				newline_in_str(char *str);
+int				newline_in_str(char *str, int nb_car, int mode);
 
 #endif

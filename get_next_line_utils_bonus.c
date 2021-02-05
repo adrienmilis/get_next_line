@@ -43,23 +43,31 @@ char			*trunc_str_wfree(char *str)
 	return (new_str);
 }
 
-void			stock_supp(const char *str, char *sup, int nb_car)
+void			stock_supp(const char *str, char *sup, int nb_car, int mode)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (str[i] != '\n' && i < nb_car)
-		i++;
-	i++;
-	while (i < nb_car && str[i])
+	if (mode == 0)
 	{
-		sup[j] = str[i];
-		j++;
+		while (str[i] != '\n' && str[i])
+			i++;
 		i++;
+		while (str[i])
+			sup[j++] = str[i++];
+		sup[j] = '\0';
 	}
-	sup[j] = '\0';
+	if (mode == 1)
+	{
+		while (str[i] != '\n' && i < nb_car)
+			i++;
+		i++;
+		while (i < nb_car)
+			sup[j++] = str[i++];
+		sup[j] = '\0';
+	}
 }
 
 char			*ft_strjoin_wfree(char *str, char *buf, int nb_car)
@@ -84,16 +92,28 @@ char			*ft_strjoin_wfree(char *str, char *buf, int nb_car)
 	return (str_cat);
 }
 
-int				newline_in_str(char *str)
+int				newline_in_str(char *str, int nb_car, int mode)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	if (mode == 0)
 	{
-		if (str[i] == '\n')
-			return (1);
-		i++;
+		while (str[i])
+		{
+			if (str[i] == '\n')
+				return (1);
+			i++;
+		}
+	}
+	if (mode == 1)
+	{
+		while (i < nb_car)
+		{
+			if (str[i] == '\n')
+				return (1);
+			i++;
+		}
 	}
 	return (0);
 }
