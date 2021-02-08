@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 
-void			*ft_calloc(int count, int size);
+int				end_or_error(int ret, char *buf, char **sup_str);
 int				alloc_strs(char **buf, char **sup, int fd);
 char			*ft_strdup(const char *str);
 int				make_line(int fd, char *buf, char **line, char **sup);

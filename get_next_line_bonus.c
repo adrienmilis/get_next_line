@@ -12,13 +12,25 @@
 
 #include "get_next_line_bonus.h"
 
+int		end_or_error(int ret, char *buf, char **sup_str)
+{
+	if (buf)
+		free(buf);
+	if (*sup_str)
+	{
+		free(*sup_str);
+		*sup_str = NULL;
+	}
+	return (ret);
+}
+
 int		alloc_strs(char **buf, char **sup, int fd)
 {
-	if (!(*buf = malloc((BUFFER_SIZE) + 1 * sizeof(char))))
+	if (!(*buf = malloc((BUFFER_SIZE) * sizeof(char))))
 		return (0);
 	if (sup[fd] == NULL)
 	{
-		if (!(sup[fd] = malloc(BUFFER_SIZE * sizeof(char))))
+		if (!(sup[fd] = malloc((BUFFER_SIZE + 1) * sizeof(char))))
 			return (0);
 		sup[fd][0] = 0;
 	}
@@ -51,23 +63,17 @@ int		make_line(int fd, char *buf, char **line, char **sup)
 
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == -1 || ret == 0)
-	{
-		sup[fd][0] = 0;
-		free(buf);
-		return (ret);
-	}
+		return (end_or_error(ret, buf, &sup[fd]));
 	while (!newline_in_str(buf, ret, 1))
 	{
-		*line = ft_strjoin_wfree(*line, buf, ret);
+		if (!(*line = ft_strjoin_wfree(*line, buf, ret)))
+			return (end_or_error(-1, buf, &sup[fd]));
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (ret == -1 || ret == 0)
-		{
-			sup[fd][0] = 0;
-			free(buf);
-			return (ret);
-		}
+			return (end_or_error(ret, buf, &sup[fd]));
 	}
-	*line = ft_strjoin_wfree(*line, buf, ret);
+	if (!(*line = ft_strjoin_wfree(*line, buf, ret)))
+		return (end_or_error(-1, buf, &sup[fd]));
 	stock_supp(buf, sup[fd], ret, 1);
 	free(buf);
 	return (1);
@@ -82,17 +88,17 @@ int		get_next_line(int fd, char **line)
 	if (fd < 0 || fd > OPEN_MAX || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!(alloc_strs(&buf, sup, fd)))
-		return (-1);
+		return (end_or_error(-1, buf, &sup[fd]));
 	if (!(*line = ft_strdup(sup[fd])))
-		return (-1);
+		return (end_or_error(-1, buf, &sup[fd]));
 	if (newline_in_str(*line, 0, 0))
 	{
 		stock_supp(*line, sup[fd], 0, 0);
-		*line = trunc_str_wfree(*line);
+		if (!(*line = trunc_str_wfree(*line)))
+			return (end_or_error(-1, buf, &sup[fd]));
 		free(buf);
 		return (1);
 	}
 	ret = make_line(fd, buf, line, sup);
 	return (ret);
 }
-
