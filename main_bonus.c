@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include "get_next_line_bonus.h"
 
-int main()
+int main(int argc, char **argv)
 {
 	char	*line;
 	int 	fd1, fd2, fd3;
@@ -11,9 +11,9 @@ int main()
 	ret1 = 1;
 	ret2 = 2;
 	ret3 = 3;
-	fd1 = open("/Users/amilis/Documents/Projects/get_next_line_project/GNL_github/foo", O_RDONLY);
-	fd2 = open("/Users/amilis/Documents/Projects/get_next_line_project/GNL_github/bar", O_RDONLY);
-	fd3 = open("/Users/amilis/Documents/Projects/get_next_line_project/GNL_github/baz", O_RDONLY);
+	fd1 = open(argv[1], O_RDONLY);
+	fd2 = open(argv[2], O_RDONLY);
+	fd3 = open([argv[3], O_RDONLY);
 
 	while (ret1 > 0 || ret2 > 0 || ret3 > 0)
 	{
